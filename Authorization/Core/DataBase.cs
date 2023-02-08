@@ -2,30 +2,34 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Text;
 
-namespace Authorization
+
+namespace Authorization.Core
 {
     public class DataBase
     {
-        SqlConnection sqlConnection = new SqlConnection(@"Data Source=IASP-158\SQLEXPRESS; 
-                                                            Initial Catalog=AuthorizationDB; User Id = Administrator; password = 123qweQWE");
+
+        SqlConnection sqlConnection = new SqlConnection(@"Data Source=IASP-158\SQLEXPRESS; Initial Catalog=AuthorizationDB; User Id = Administrator; password = 123qweQWE");
+
         /// Method OpenConncetion()
         public void OpenConncetion()
         {
-            if (sqlConnection.State == System.Data.ConnectionState.Closed)
+            if (sqlConnection.State == ConnectionState.Closed)
             {
                 sqlConnection.Open();
             }
         }
+
+
         /// Method CloseConncetion()
         public void CloseConncetion()
         {
-            if (sqlConnection.State == System.Data.ConnectionState.Open)
+            if (sqlConnection.State == ConnectionState.Open)
             {
                 sqlConnection.Close();
             }
         }
+
 
         /// Method GetConnection()
         public SqlConnection GetConnection()
@@ -33,14 +37,7 @@ namespace Authorization
             return sqlConnection;
         }
 
-        /// Method GetDataTable
-        internal void GetDataTable(string queryExpression)
-        {
-            throw new NotImplementedException();
-        }
 
-
-        /// Method GetDataTable
         public static DataTable UpdateDataTable(string queryExpression)
         {
             DataTable table = null;
@@ -56,10 +53,12 @@ namespace Authorization
                         table = new DataTable();
                         adapter.SelectCommand = command;
                         adapter.Fill(table);
+                        connection.Close();
                     }
                     catch (Exception ex)
                     {
                         Debug.Print("Error: " + ex.Message);
+                        throw new Exception(queryExpression, ex);
                     }
                 }
             }
@@ -67,33 +66,59 @@ namespace Authorization
         }
 
 
-        public static object GetActivationData(string queryExpression)
+        public static bool ExecuteNonQueryHandler(string queryExpression)
         {
-            object resultTask = null;
-
-            string connectionString = "";
-            //string connectionString = Properties.Settings.Default.DataConnectionString;
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            using (SqlDataAdapter adapter = new SqlDataAdapter(queryExpression, connection))
+            bool result = false;
+            DataBase database = new DataBase();
+            using (SqlConnection connection = database.GetConnection())
             {
-                SqlCommand command = new SqlCommand(queryExpression, connection);
-
-                // Part 3: Use DataAdapter to fill DataTable.
-                DataTable tableUsers = new DataTable();
-                adapter.Fill(tableUsers);
-
-                // Part 4: render data onto the screen.
-                // dataGridView.DataSource = tableUsers;
+                using (SqlDataAdapter adapter = new SqlDataAdapter())
+                {
+                    try
+                    {
+                        connection.Open();
+                        SqlCommand command = new SqlCommand(queryExpression, connection);
+                        result = 0 < command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.Print("Error: " + ex.Message);
+                        throw new Exception(queryExpression, ex);
+                    }
+                }
             }
-
-            return resultTask;
+            return result;
         }
 
 
+        public static object ExecuteScalarHandler(string queryExpression)
+        {
+            object result = null;
+            DataBase database = new DataBase();
+            using (SqlConnection connection = database.GetConnection())
+            {
+                using (SqlDataAdapter adapter = new SqlDataAdapter())
+                {
+                    try
+                    {
+                        connection.Open();
+                        SqlCommand command = new SqlCommand(queryExpression, connection);
+                        result = command.ExecuteScalar();
+                        connection.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.Print("Error: " + ex.Message);
+                        throw new Exception(queryExpression, ex);
+                    }
+                }
+            }
+            return result;
+        }
+
 
     }
-
-
 
 }
 

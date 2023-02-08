@@ -40,10 +40,10 @@ namespace Authorization.Properties {
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string Login {
             get {
-                return ((string)(this["Login"]));
+                return ((string)(this["login"]));
             }
             set {
-                this["Login"] = value;
+                this["login"] = value;
             }
         }
         
@@ -52,10 +52,10 @@ namespace Authorization.Properties {
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string Password {
             get {
-                return ((string)(this["Password"]));
+                return ((string)(this["password"]));
             }
             set {
-                this["Password"] = value;
+                this["password"] = value;
             }
         }
         
@@ -64,10 +64,10 @@ namespace Authorization.Properties {
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string SerialNumber {
             get {
-                return ((string)(this["SerialNumber"]));
+                return ((string)(this["serialNumber"]));
             }
             set {
-                this["SerialNumber"] = value;
+                this["serialNumber"] = value;
             }
         }
     }

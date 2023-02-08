@@ -1,13 +1,14 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Authorization.Services;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 
-namespace Authorization
+namespace Authorization.Core
 {
     public class Authentification : ObservableValidator
     {
@@ -15,11 +16,11 @@ namespace Authorization
         public static bool IsActivated { get; set; } = Properties.Settings.Default.IsActivated;
 
 
-        #region Fields
+        #region Private Fields
 
-        public static string Login { get; set; } = Properties.Settings.Default.Login;
-        public static string Password { get; set; } = Properties.Settings.Default.Password;
-        public static string SerialNumber { get; set; } = Properties.Settings.Default.SerialNumber;
+        private static string login { get; set; } = Properties.Settings.Default.Login;
+        private static string password { get; set; } = Properties.Settings.Default.Password;
+        private static string serialNumber { get; set; } = Properties.Settings.Default.SerialNumber;
 
         #endregion
 
@@ -58,6 +59,15 @@ namespace Authorization
             set => SetProperty(ref email, value, true);
         }
 
+
+        private string msg;
+
+        public string Message
+        {
+            get { return msg; }
+            set { SetProperty(ref msg, value); }
+        }
+
         #endregion
 
 
@@ -93,46 +103,87 @@ namespace Authorization
                 if (window.Activate())
                 {
                     IsActivated = Properties.Settings.Default.IsActivated;
-                    if (!IsActivated)
-                    {
-
-                    }
                 }
             }
             return IsActivated;
         }
 
 
+        public static bool ControlVersion(string email)
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            string version = assembly.GetName().Version.ToString();
+            string queryExpression = $"UPDATE Users SET Version = '{version}' WHERE Email = '{email}'";
+            DataTable table = DataBase.UpdateDataTable(queryExpression);
+            return table.Rows.Contains("Version");
+        }
+
+
         public bool ValidateActivationInDataBase()
         {
-            string queryExpression = $"Select id, IsActivated, Email, Password, SerialNumber from Users where IsActivated='{IsActivated}' and Email= '{Login}' and Password='{Password}' and SerialNumber='{SerialNumber}'";
-            //$"Insert into Users (FirstName, LastName, Email, SerialNumber) Values ('{firstName}','{lastName}', '{Login}', '{SerialNumber}')"}
+            string queryExpression = $"Select id, IsActivated, Email, password, serialNumber from Users where IsActivated='{IsActivated}' and Email= '{login}' and password='{password}' and serialNumber='{serialNumber}'";
             DataTable table = DataBase.UpdateDataTable(queryExpression);
             IsActivated = table.Rows.Contains(email);
             return IsActivated;
         }
 
 
-        public void RegistrationCommandHandler()
+        public bool RegistrationCommandHandler()
         {
+            bool result = false;
             ValidateAllProperties();
-            Debug.Print($"ValidateErrors counts {Errors.Length}");
             if (Errors.Length == counts)
             {
-                //Debug.Print("IsValidResult!");
-                //var mail = new MailManager();
-                //string serialNumber = HardDriveInfo.GetMainHardSerialNumber();
-                //if (Authentification.RegistrationInDataBase(firstName, lastName, email, serialNumber))
-                //{
-                //    var password = PasswordClient.GetPasswordFromDataBase(email);
-                //    mail.SendDatatoMail(email, password);
-                //}
+                serialNumber = HardDriveInfo.GetMainHardSerialNumber();
+                if (string.IsNullOrEmpty(serialNumber))
+                {
+                    throw new ArgumentNullException("SerialNumber");
+                }
+                else
+                {
+                    result = RegistrationInDataBase(serialNumber);
+                    if (result)
+                    {
+                        var mail = new MailManager();
+                        var password = GetPasswordFromDataBase(email);
+                        mail.SendDataToMail(email, password);
+                        mail.Dispose();
+                    }
+                }
             }
             else
             {
                 counts = Errors.Length;
             }
+            return result;
         }
+
+
+        private bool RegistrationInDataBase(string serialNumber)
+        {
+            bool result = false;
+            string queryExpression = $"Insert into Users (FirstName, LastName, Email, serialNumber) Values ('{firstName}','{lastName}', '{login}', '{serialNumber}')";
+            if (DataBase.ExecuteNonQueryHandler(queryExpression))
+            {
+                Message = " ... password... ";
+                result = true;
+            }
+            return result;
+        }
+
+
+        public static string GetPasswordFromDataBase(string email)
+        {
+            string result = string.Empty;
+            string queryExpression = $"SELECT password FROM Users WHERE Email = '{email}'";
+            object item = DataBase.ExecuteScalarHandler(queryExpression);
+            if (item is string password)
+            {
+                result = password;
+            }
+            return result;
+        }
+
 
     }
 }

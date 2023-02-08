@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Authorization.Core;
+using System;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -36,12 +37,36 @@ namespace Authorization
         }
 
 
-        private void Registrationlink_Click(object sender, RoutedEventArgs e)
+        private void Registration_Click(object sender, RoutedEventArgs e)
         {
-            LabelName.Content = "REGISTRATION";
-            // hidden fields
-            RegTextLink.Visibility = Visibility.Collapsed;
-            PasswordField.Visibility = Visibility.Collapsed;
+            Dispatcher.CurrentDispatcher.Invoke(() =>
+            {
+                IsActivated = viewmodel.RegistrationCommandHandler();
+                Properties.Settings.Default.IsActivated = IsActivated;
+                Properties.Settings.Default.Save();
+                if (!IsActivated)
+                {
+                    throw new Exception("Что то не так");
+                }
+                else
+                {
+                    this.Close();
+                }
+            });
         }
+
+
+        private void ChageWindow_Click(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.CurrentDispatcher.Invoke(() => 
+            {
+                LabelName.Content = "REGISTRATION";
+                RegTextLink.Visibility = Visibility.Collapsed;
+                PasswordField.Visibility = Visibility.Collapsed;
+            });
+        }
+
+
+
     }
 }
