@@ -1,0 +1,76 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--  CheckBox style as SwitchBox  -->
+    <Style x:Key="SwitchBox" TargetType="CheckBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <StackPanel Orientation="Horizontal">
+                        <Grid>
+                            <Border
+                                Width="45"
+                                Height="20"
+                                Margin="5,0"
+                                Background="LightGray"
+                                CornerRadius="10" />
+                            <Border
+                                x:Name="button"
+                                Width="25"
+                                Height="25"
+                                HorizontalAlignment="Left"
+                                CornerRadius="12.5" />
+                        </Grid>
+                        <ContentPresenter
+                            x:Name="content"
+                            Margin="10,0,0,0"
+                            VerticalAlignment="Center"
+                            Content="{TemplateBinding Content}" />
+                    </StackPanel>
+                    <ControlTemplate.Resources>
+                        <Storyboard x:Key="right">
+                            <ThicknessAnimation
+                                Storyboard.TargetName="button"
+                                Storyboard.TargetProperty="Margin"
+                                From="0,0,0,0"
+                                To="28,0,0,0"
+                                Duration="0:0:0.4">
+                                <ThicknessAnimation.EasingFunction>
+                                    <CircleEase EasingMode="EaseOut" />
+                                </ThicknessAnimation.EasingFunction>
+                            </ThicknessAnimation>
+                        </Storyboard>
+                        <Storyboard x:Key="left">
+                            <ThicknessAnimation
+                                Storyboard.TargetName="button"
+                                Storyboard.TargetProperty="Margin"
+                                From="28,0,0,0"
+                                To="0,0,0,0"
+                                Duration="0:0:0.4">
+                                <ThicknessAnimation.EasingFunction>
+                                    <CircleEase EasingMode="EaseOut" />
+                                </ThicknessAnimation.EasingFunction>
+                            </ThicknessAnimation>
+                        </Storyboard>
+                    </ControlTemplate.Resources>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="false">
+                            <Trigger.ExitActions>
+                                <RemoveStoryboard BeginStoryboardName="leftt" />
+                                <BeginStoryboard x:Name="rightt" Storyboard="{StaticResource right}" />
+                            </Trigger.ExitActions>
+                            <Setter TargetName="button" Property="Background" Value="LightSkyBlue" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Trigger.ExitActions>
+                                <RemoveStoryboard BeginStoryboardName="rightt" />
+                                <BeginStoryboard x:Name="leftt" Storyboard="{StaticResource left}" />
+                            </Trigger.ExitActions>
+                            <Setter TargetName="button" Property="Background" Value="LightGreen" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+	<AddIn Type="Application">
+		<Name>IBIMTool</Name>
+		<Assembly>.\IBIMTool\IBIMTool.dll</Assembly>
+		<AddInId>{2DBC6DCB-5FD8-49F4-A182-7A9123AB330D}</AddInId>
+		<FullClassName>IBIMTool.Core.IBIMToolApp</FullClassName>
+		<VendorDescription>Autodesk, www.autodesk.com</VendorDescription>
+		<AllowLoadIntoExistingSession>true</AllowLoadIntoExistingSession>
+		<VendorId>Yerkebulan</VendorId>
+		<Version>1.0.0.1</Version>
+	</AddIn>
+</RevitAddIns>

@@ -1,0 +1,584 @@
+﻿<Page
+    x:Class="IBIMTool.Views.CutHoleDockPaneView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mod="clr-namespace:IBIMTool.RevitModels"
+    xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+    xmlns:vm="clr-namespace:IBIMTool.ViewModels"
+    x:Name="ViewPage"
+    d:DataContext="{d:DesignInstance Type=vm:CutHoleDataViewModel}"
+    d:Height="Auto"
+    d:Width="250"
+    Background="WhiteSmoke"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/IBIMTool;component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <!--  GridMain  -->
+    <Border BorderBrush="Gray" BorderThickness="2.5">
+        <Grid Name="ParentGrid" Width="Auto">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+
+            <!--  Header  -->
+            <Border Grid.Row="0" Background="{DynamicResource FloralGradientBrush}">
+                <Grid VerticalAlignment="Center">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Name="ActiveTitle"
+                        Grid.Column="0"
+                        MinWidth="100"
+                        MaxWidth="300"
+                        Margin="10,5"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
+                        TextElement.FontSize="13">
+                        <Label.BitmapEffect>
+                            <DropShadowBitmapEffect />
+                        </Label.BitmapEffect>
+                    </Label>
+
+                    <ToggleButton
+                        Grid.Column="1"
+                        Width="45"
+                        Height="45"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        CommandParameter="{Binding Path=IsStarted}"
+                        IsChecked="{Binding Path=IsOptionEnabled, Mode=TwoWay}"
+                        Visibility="{Binding Path=IsStarted, Mode=OneWay, Converter={StaticResource BoolToVis}, FallbackValue=Collapsed}">
+                        <ToggleButton.Style>
+                            <Style TargetType="ToggleButton">
+                                <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+                                <Setter Property="Content" Value="&#xE713;" />
+                                <Setter Property="FontSize" Value="21" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+                                        <Setter Property="Content" Value="&#59589;" />
+                                        <Setter Property="FontSize" Value="21" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+                </Grid>
+            </Border>
+
+            <!--  Options  -->
+            <ListView
+                Name="OptionView"
+                Grid.Row="1"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Stretch"
+                Style="{StaticResource VisibleAnimation}"
+                Visibility="{Binding Path=IsOptionEnabled, Converter={StaticResource BoolToVis}, FallbackValue=Collapsed}">
+
+                <!--  Document data  -->
+                <ListViewItem>
+                    <Border Style="{StaticResource GroupBoxBorderStyle}">
+                        <StackPanel>
+
+                            <ListBox ItemsSource="{Binding Path=DocumentCollection, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Extended">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type mod:DocumentModel}">
+                                        <StackPanel
+                                            Margin="5"
+                                            CanHorizontallyScroll="True"
+                                            Orientation="Horizontal">
+                                            <CheckBox
+                                                Width="Auto"
+                                                Height="20"
+                                                Margin="5,2.5"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                IsChecked="{Binding Path=IsEnabled, Mode=TwoWay}" />
+                                            <TextBox
+                                                Width="30"
+                                                Height="20"
+                                                Margin="5,2.5"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                Text="{Binding Path=SectionNotation, Mode=TwoWay}" />
+                                            <TextBlock
+                                                Width="Auto"
+                                                Height="20"
+                                                Margin="5,2.5"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontWeight="Black"
+                                                Text="{Binding Path=Title, Mode=OneWay}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                        </StackPanel>
+                    </Border>
+                </ListViewItem>
+
+                <!--  Core material  -->
+                <ListViewItem>
+                    <Border Style="{StaticResource GroupBoxBorderStyle}">
+                        <StackPanel>
+
+                            <BulletDecorator Name="BulletCoreMaterial" Margin="5">
+                                <BulletDecorator.Bullet>
+                                    <TextBlock
+                                        Width="125"
+                                        Foreground="DarkBlue"
+                                        Text="Structure material: " />
+                                </BulletDecorator.Bullet>
+                                <ComboBox
+                                    Name="ComboStructureMats"
+                                    Width="{Binding ElementName=ActiveTitle, Path=ActualWidth}"
+                                    DisplayMemberPath="Value.Name"
+                                    ItemsSource="{Binding Path=StructureMaterials, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                    SelectedValue="{Binding Path=SelectedMaterial}"
+                                    SelectedValuePath="Value" />
+                            </BulletDecorator>
+
+                        </StackPanel>
+                    </Border>
+                </ListViewItem>
+
+                <!--  Size settings  -->
+                <ListViewItem>
+                    <Expander Grid.Row="3" Header="Size settings">
+                        <Border Style="{StaticResource GroupBoxBorderStyle}">
+                            <StackPanel>
+
+                                <BulletDecorator Margin="5">
+                                    <BulletDecorator.Bullet>
+                                        <TextBlock
+                                            Width="125"
+                                            Foreground="DarkBlue"
+                                            Text="Cut offset size: " />
+                                    </BulletDecorator.Bullet>
+                                    <StackPanel
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <Slider
+                                            Name="CutOffset"
+                                            Width="{Binding ElementName=ActiveTitle, Path=ActualWidth}"
+                                            Maximum="150"
+                                            Minimum="5"
+                                            TickFrequency="10"
+                                            Value="{Binding Path=CutOffsetSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBox
+                                            MinWidth="30"
+                                            Text="{Binding ElementName=CutOffset, Path=Value}"
+                                            TextAlignment="Center" />
+                                    </StackPanel>
+                                </BulletDecorator>
+
+                                <BulletDecorator Margin="5">
+                                    <BulletDecorator.Bullet>
+                                        <TextBlock
+                                            Width="125"
+                                            Foreground="DarkBlue"
+                                            Text="Minimum length: " />
+                                    </BulletDecorator.Bullet>
+                                    <StackPanel
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <Slider
+                                            Name="MinDephtSize"
+                                            Width="{Binding ElementName=ActiveTitle, Path=ActualWidth}"
+                                            Maximum="150"
+                                            Minimum="5"
+                                            TickFrequency="5"
+                                            Value="{Binding Path=MinDepthSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBox
+                                            MinWidth="30"
+                                            Text="{Binding ElementName=MinDephtSize, Path=Value}"
+                                            TextAlignment="Center" />
+                                    </StackPanel>
+                                </BulletDecorator>
+
+                                <BulletDecorator Margin="5">
+                                    <BulletDecorator.Bullet>
+                                        <TextBlock
+                                            Width="125"
+                                            Foreground="DarkBlue"
+                                            Text="Minimum side size: " />
+                                    </BulletDecorator.Bullet>
+                                    <StackPanel
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <Slider
+                                            Name="MinSideSize"
+                                            Width="{Binding ElementName=ActiveTitle, Path=ActualWidth}"
+                                            Maximum="150"
+                                            Minimum="5"
+                                            TickFrequency="5"
+                                            Value="{Binding Path=MinSideSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBox
+                                            MinWidth="30"
+                                            Text="{Binding ElementName=MinSideSize, Path=Value}"
+                                            TextAlignment="Center" />
+                                    </StackPanel>
+                                </BulletDecorator>
+
+                            </StackPanel>
+                        </Border>
+                    </Expander>
+                </ListViewItem>
+
+                <!--  Simbol settings  -->
+                <ListViewItem>
+                    <Expander Grid.Row="3" Header="Family settings">
+                        <Border Style="{StaticResource GroupBoxBorderStyle}">
+                            <StackPanel>
+
+                                <StackPanel.Resources>
+                                    <CollectionViewSource x:Key="symbols" Source="{Binding Path=SymbolList, Mode=OneWay}">
+                                        <CollectionViewSource.SortDescriptions>
+                                            <scm:SortDescription Direction="Ascending" PropertyName="FamilyName" />
+                                            <scm:SortDescription Direction="Ascending" PropertyName="Name" />
+                                        </CollectionViewSource.SortDescriptions>
+                                        <CollectionViewSource.GroupDescriptions>
+                                            <PropertyGroupDescription PropertyName="FamilyName" />
+                                        </CollectionViewSource.GroupDescriptions>
+                                    </CollectionViewSource>
+                                </StackPanel.Resources>
+
+                                <BulletDecorator Margin="5">
+                                    <BulletDecorator.Bullet>
+                                        <RadioButton
+                                            Name="LoadFamilyBtn"
+                                            Width="125"
+                                            Click="LoadFamilyBtn_Click"
+                                            Content="Load family:"
+                                            Foreground="DarkBlue" />
+                                    </BulletDecorator.Bullet>
+                                    <ComboBox
+                                        Name="ComboOpenningSymbol"
+                                        Width="{Binding ElementName=ActiveTitle, Path=ActualWidth}"
+                                        IsSynchronizedWithCurrentItem="False"
+                                        ItemTemplate="{Binding Source={StaticResource SymbolGroupTemplate}}"
+                                        ItemsSource="{Binding Source={StaticResource symbols}, IsAsync=True}"
+                                        SelectedItem="{Binding Path=SelectedSymbol, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+                                        <ComboBox.GroupStyle>
+                                            <GroupStyle ContainerStyle="{StaticResource SymbolContainerStyle}" HeaderTemplate="{StaticResource SymbolGroupHeader}" />
+                                        </ComboBox.GroupStyle>
+
+                                    </ComboBox>
+                                </BulletDecorator>
+
+                            </StackPanel>
+                        </Border>
+                    </Expander>
+                </ListViewItem>
+
+                <!--  Size parameter settings  -->
+                <ListViewItem>
+                    <Expander Grid.Row="3" Header="Size parameters">
+                        <Border Style="{StaticResource GroupBoxBorderStyle}">
+                            <StackPanel>
+
+                                <BulletDecorator Margin="5">
+                                    <BulletDecorator.Bullet>
+                                        <TextBlock
+                                            Width="125"
+                                            Foreground="DarkBlue"
+                                            Text="Width parameter: " />
+                                    </BulletDecorator.Bullet>
+                                    <ComboBox
+                                        Name="ComboWidthMark"
+                                        Width="{Binding ElementName=ActiveTitle, Path=ActualWidth}"
+                                        IsSynchronizedWithCurrentItem="False"
+                                        ItemsSource="{Binding Path=SharedParameters}"
+                                        SelectedItem="{Binding Path=WidthParamName}" />
+                                </BulletDecorator>
+
+                                <BulletDecorator Margin="5">
+                                    <BulletDecorator.Bullet>
+                                        <TextBlock
+                                            Width="125"
+                                            Foreground="DarkBlue"
+                                            Text="Height parameter: " />
+                                    </BulletDecorator.Bullet>
+                                    <ComboBox
+                                        Name="ComboHeightMark"
+                                        Width="{Binding ElementName=ActiveTitle, Path=ActualWidth}"
+                                        IsSynchronizedWithCurrentItem="False"
+                                        ItemsSource="{Binding Path=SharedParameters}"
+                                        SelectedItem="{Binding Path=HightParamName}" />
+                                </BulletDecorator>
+
+                                <BulletDecorator Margin="5">
+                                    <BulletDecorator.Bullet>
+                                        <TextBlock
+                                            Width="125"
+                                            Foreground="DarkBlue"
+                                            Text="Elevation parameter: " />
+                                    </BulletDecorator.Bullet>
+                                    <ComboBox
+                                        Name="ComboElevMark"
+                                        Width="{Binding ElementName=ActiveTitle, Path=ActualWidth}"
+                                        IsSynchronizedWithCurrentItem="False"
+                                        ItemsSource="{Binding Path=SharedParameters}"
+                                        SelectedItem="{Binding Path=ElevationOfLevel}" />
+                                </BulletDecorator>
+
+                            </StackPanel>
+                        </Border>
+                    </Expander>
+                </ListViewItem>
+
+                <!--  Additional settings  -->
+                <ListViewItem>
+                    <Expander Grid.Row="3" Header="Additional parameters">
+                        <Border Style="{StaticResource GroupBoxBorderStyle}">
+                            <StackPanel>
+
+                                <BulletDecorator Margin="5">
+                                    <BulletDecorator.Bullet>
+                                        <TextBlock
+                                            Width="125"
+                                            Foreground="DarkBlue"
+                                            Text="Level elevation: " />
+                                    </BulletDecorator.Bullet>
+                                    <TextBox
+                                        Name="TxtElevatOfRef"
+                                        Width="{Binding ElementName=ActiveTitle, Path=ActualWidth}"
+                                        Height="23"
+                                        Text="{Binding Path=LevelElevation}" />
+                                </BulletDecorator>
+
+                                <BulletDecorator Margin="5">
+                                    <BulletDecorator.Bullet>
+                                        <TextBlock
+                                            Width="125"
+                                            Foreground="DarkBlue"
+                                            Text="Project section mark: " />
+                                    </BulletDecorator.Bullet>
+                                    <TextBox
+                                        Name="TxtSectionPrm"
+                                        Width="{Binding ElementName=ActiveTitle, Path=ActualWidth}"
+                                        Height="23"
+                                        Text="{Binding Path=SectionParamName}" />
+                                </BulletDecorator>
+
+                            </StackPanel>
+                        </Border>
+                    </Expander>
+                </ListViewItem>
+
+            </ListView>
+
+            <!--  Filter Control  -->
+            <WrapPanel
+                Grid.Row="2"
+                Height="Auto"
+                Margin="10,5"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Style="{DynamicResource VisibleAnimation}"
+                Visibility="{Binding Path=IsDataRetrieved, Converter={StaticResource BoolToVis}, FallbackValue=Collapsed}">
+
+                <ComboBox
+                    Name="ComboLevelFilter"
+                    MinWidth="{Binding ElementName=ActiveTitle, Path=ActualWidth}"
+                    ItemsSource="{Binding Path=UniqueLevelNames, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedValue="{Binding Path=LevelTextFilter, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" />
+
+                <ComboBox
+                    Name="ComboSymbolFilter"
+                    MinWidth="{Binding ElementName=ActiveTitle, Path=ActualWidth}"
+                    ItemsSource="{Binding Path=UniqueSymbolNames, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedValue="{Binding Path=SymbolTextFilter, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" />
+
+            </WrapPanel>
+
+            <!--  DataGridView  -->
+            <ScrollViewer
+                Grid.Row="3"
+                HorizontalScrollBarVisibility="Auto"
+                Style="{DynamicResource VisibleAnimation}"
+                VerticalScrollBarVisibility="Auto"
+                Visibility="{Binding Path=IsDataRetrieved, Converter={StaticResource BoolToVis}, FallbackValue=Collapsed}">
+
+                <DataGrid
+                    Name="DataGridView"
+                    ItemsSource="{Binding Path=ViewDataGridCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Style="{DynamicResource DataGridStandart}">
+
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSelected}" Value="true">
+                                    <Setter Property="Background" Value="AliceBlue" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+
+                    <DataGrid.Columns>
+
+                        <DataGridTemplateColumn Width="30" CellStyle="{StaticResource SingleClickEditStyle}">
+                            <DataGridTemplateColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <CheckBox
+                                        Name="CheckSelectAll"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        IsChecked="{Binding DataContext.AllSelectChecked, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                        <CheckBox.LayoutTransform>
+                                            <ScaleTransform ScaleX="1.05" ScaleY="1.05" />
+                                        </CheckBox.LayoutTransform>
+                                    </CheckBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.HeaderTemplate>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox
+                                        Name="IsSelect"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Click="CheckBox_Click"
+                                        IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTextColumn
+                            Width="Auto"
+                            MinWidth="150"
+                            Binding="{Binding SymbolName, Mode=OneWay}"
+                            Header="Symbol Name">
+                            <DataGridTextColumn.EditingElementStyle>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="Margin" Value="5" />
+                                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    <Setter Property="IsReadOnly" Value="true" />
+                                </Style>
+                            </DataGridTextColumn.EditingElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn
+                            Width="Auto"
+                            MinWidth="75"
+                            Binding="{Binding HostCategory, Mode=OneWay}"
+                            Header="Host category">
+                            <DataGridTextColumn.EditingElementStyle>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="Margin" Value="5" />
+                                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    <Setter Property="IsReadOnly" Value="true" />
+                                </Style>
+                            </DataGridTextColumn.EditingElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn
+                            Width="Auto"
+                            MinWidth="75"
+                            Binding="{Binding Description, Mode=OneWay}"
+                            Header="Description">
+                            <DataGridTextColumn.EditingElementStyle>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="Margin" Value="5" />
+                                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    <Setter Property="IsReadOnly" Value="true" />
+                                </Style>
+                            </DataGridTextColumn.EditingElementStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+            </ScrollViewer>
+
+            <!--  ButtonPanel  -->
+            <Border Grid.Row="4" Background="Silver">
+
+                <DockPanel
+                    Grid.Row="3"
+                    Margin="5"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center">
+
+                    <Label
+                        Margin="5"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="{Binding Path=ElementModelData.Count, Mode=OneWay}"
+                        ContentStringFormat="Found collision: {0} "
+                        FontSize="13"
+                        FontWeight="DemiBold">
+                        <Label.Style>
+                            <Style TargetType="Label">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=ElementModelData.Count}" Value="0">
+                                        <Setter Property="Foreground" Value="Red" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                    </Label>
+
+                    <Button
+                        Name="SnoopCmd"
+                        Width="75"
+                        Height="30"
+                        Margin="5"
+                        Command="{Binding Path=RefreshDataCommand, Mode=OneTime, UpdateSourceTrigger=Explicit}"
+                        IsEnabled="{Binding Path=IsOptionCompleted, Mode=OneWay, UpdateSourceTrigger=Explicit}">
+                        <Label
+                            Content="&#59165;"
+                            FontFamily="Segoe MDL2 Assets"
+                            FontSize="15"
+                            Foreground="DarkBlue" />
+                    </Button>
+
+                    <Button
+                        Name="CutVoidCmd"
+                        Width="75"
+                        Height="30"
+                        Margin="5"
+                        Command="{Binding Path=ShowModelCommand, Mode=OneTime, UpdateSourceTrigger=Explicit}"
+                        IsEnabled="{Binding Path=IsDataRetrieved, Mode=OneWay, UpdateSourceTrigger=Explicit}">
+                        <Label
+                            Content="&#59538;"
+                            FontFamily="Segoe MDL2 Assets"
+                            FontSize="15"
+                            Foreground="DarkBlue" />
+                    </Button>
+
+                </DockPanel>
+            </Border>
+
+        </Grid>
+    </Border>
+
+</Page>

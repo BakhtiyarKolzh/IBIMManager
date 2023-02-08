@@ -1,0 +1,48 @@
+﻿<Window
+    x:Class="IBIMTool.Views.RoomFinishingWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:IBIMTool.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:IBIMTool.ViewModels"
+    Title="FinishingWindow"
+    Width="800"
+    Height="450"
+    d:DataContext="{d:DesignInstance Type=vm:AreaRebarMarkViewModel}"
+    ResizeMode="CanResizeWithGrip"
+    SizeToContent="Height"
+    Topmost="True"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/IBIMTool;component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Name="ParentGrid">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="75" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="1.5*" />
+        </Grid.ColumnDefinitions>
+
+        <Border
+            Grid.Row="0"
+            Grid.Column="0"
+            Style="{StaticResource GroupBoxBorderStyle}">
+            <ScrollViewer />
+        </Border>
+
+    </Grid>
+
+</Window>

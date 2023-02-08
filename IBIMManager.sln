@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IBIMTool", "IBIMTool\IBIMTool.csproj", "{9728B73D-4084-4DA2-82DA-877A68011A8C}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Revit.Async.Shared", "Revit.Async.Shared\Revit.Async.Shared.shproj", "{26214B67-5134-4C0A-86A6-51128E71AFE2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization", "Authorization\Authorization.csproj", "{2058C713-52E0-4CE9-A682-F2878A59449F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9728B73D-4084-4DA2-82DA-877A68011A8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9728B73D-4084-4DA2-82DA-877A68011A8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9728B73D-4084-4DA2-82DA-877A68011A8C}.Debug|x64.ActiveCfg = Debug|x64
+		{9728B73D-4084-4DA2-82DA-877A68011A8C}.Debug|x64.Build.0 = Debug|x64
+		{9728B73D-4084-4DA2-82DA-877A68011A8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9728B73D-4084-4DA2-82DA-877A68011A8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9728B73D-4084-4DA2-82DA-877A68011A8C}.Release|x64.ActiveCfg = Release|x64
+		{9728B73D-4084-4DA2-82DA-877A68011A8C}.Release|x64.Build.0 = Release|x64
+		{2058C713-52E0-4CE9-A682-F2878A59449F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2058C713-52E0-4CE9-A682-F2878A59449F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2058C713-52E0-4CE9-A682-F2878A59449F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2058C713-52E0-4CE9-A682-F2878A59449F}.Debug|x64.Build.0 = Debug|Any CPU
+		{2058C713-52E0-4CE9-A682-F2878A59449F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2058C713-52E0-4CE9-A682-F2878A59449F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2058C713-52E0-4CE9-A682-F2878A59449F}.Release|x64.ActiveCfg = Release|Any CPU
+		{2058C713-52E0-4CE9-A682-F2878A59449F}.Release|x64.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B6D8025B-6650-4D9D-991E-E0C6DE091786}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Revit.Async.Shared\Revit.Async.Shared.projitems*{26214b67-5134-4c0a-86a6-51128e71afe2}*SharedItemsImports = 13
+		Revit.Async.Shared\Revit.Async.Shared.projitems*{9728b73d-4084-4da2-82da-877a68011a8c}*SharedItemsImports = 5
+	EndGlobalSection
+EndGlobal
