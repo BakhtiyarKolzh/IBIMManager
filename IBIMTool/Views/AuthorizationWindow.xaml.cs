@@ -1,19 +1,21 @@
-﻿using Authorization.Core;
+﻿using IBIMTool.Authorization;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace Authorization
+namespace IBIMTool.Views
 {
     public partial class AuthorizationWindow : Window
     {
         public static bool IsActivated { get; set; }
-        private readonly Authentification viewmodel;
+        private readonly AuthentificationViewModel viewmodel;
 
         public AuthorizationWindow()
         {
             InitializeComponent();
-            viewmodel = new Authentification();
+            ShadowAssist.SetDarken(this, true);
+            viewmodel = new AuthentificationViewModel();
             DataContext = viewmodel;
         }
 
@@ -58,15 +60,19 @@ namespace Authorization
 
         private void ChageWindow_Click(object sender, RoutedEventArgs e)
         {
-            Dispatcher.CurrentDispatcher.Invoke(() => 
+            Dispatcher.CurrentDispatcher.Invoke(() =>
             {
                 LabelName.Content = "REGISTRATION";
+
+                Signin.Visibility = Visibility.Collapsed;
                 RegTextLink.Visibility = Visibility.Collapsed;
                 PasswordField.Visibility = Visibility.Collapsed;
+
+                FirstName.Visibility = Visibility.Visible;
+                LastName.Visibility = Visibility.Visible;
+                Regin.Visibility = Visibility.Visible;
+                
             });
         }
-
-
-
     }
 }

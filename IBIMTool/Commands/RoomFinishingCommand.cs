@@ -36,7 +36,7 @@ namespace IBIMTool.Commands
         [STAThread]
         public bool IsCommandAvailable(UIApplication uiapp, CategorySet selectedCategories)
         {
-            View view = uiapp.ActiveUIDocument.ActiveGraphicalView;
+            View view = uiapp.ActiveUIDocument?.ActiveGraphicalView;
             return view is ViewPlan;
         }
 

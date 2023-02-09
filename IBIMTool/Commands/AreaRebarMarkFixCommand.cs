@@ -16,6 +16,7 @@ namespace IBIMTool.Commands
     internal sealed partial class AreaRebarMarkFixCommand : IExternalCommand, IExternalCommandAvailability
     {
         private readonly AreaRebarMarkFixWindow window = IBIMToolApp.Host.Services.GetRequiredService<AreaRebarMarkFixWindow>();
+        private static IBIMToolHelper toolHelper = IBIMToolApp.Host.Services.GetRequiredService<IBIMToolHelper>();
         Result IExternalCommand.Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
@@ -37,7 +38,7 @@ namespace IBIMTool.Commands
         public bool IsCommandAvailable(UIApplication uiapp, CategorySet selectedCategories)
         {
             View view = uiapp.ActiveUIDocument?.ActiveGraphicalView;
-            return view is ViewPlan;
+            return toolHelper.IsActive && view is ViewPlan;
         }
 
 

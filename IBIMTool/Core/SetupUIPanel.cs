@@ -63,6 +63,14 @@ namespace IBIMTool.Core
             };
 
 
+            // Create Cut Opening PushButtonData 
+            PushButtonData autoinfoBtn = new PushButtonData("Authorization", "Authorization", assemblyName, InfoCommand.GetPath())
+            {
+                ToolTip = "Info",
+                LargeImage = IBIMToolHelper.GetImageSource()
+            };
+
+
             //Add buttons to ribbon panel
             if (ribbonPanel != null && ribbonPanel.AddItem(cutOpenningBtn) is PushButton btn01)
             {
@@ -85,6 +93,12 @@ namespace IBIMTool.Core
             if (ribbonPanel != null && ribbonPanel.AddItem(finishingButton) is PushButton btn04)
             {
                 btn04.AvailabilityClassName = RoomFinishingCommand.GetPath();
+                ribbonPanel.AddSeparator();
+            }
+
+            if (ribbonPanel != null && ribbonPanel.AddItem(autoinfoBtn) is PushButton btn05)
+            {
+                btn05.AvailabilityClassName = InfoCommand.GetPath();
                 ribbonPanel.AddSeparator();
             }
 

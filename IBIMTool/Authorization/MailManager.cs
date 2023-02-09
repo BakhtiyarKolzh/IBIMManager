@@ -1,10 +1,9 @@
-﻿using Authorization.Core;
-using System;
+﻿using System;
 using System.Net.Mail;
 using System.Text;
 
 
-namespace Authorization.Services
+namespace IBIMTool.Authorization
 {
     internal sealed class MailManager : IDisposable
     {
@@ -46,7 +45,7 @@ namespace Authorization.Services
 
         public void Dispose()
         {
-            
+
         }
     }
 }

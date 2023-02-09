@@ -2,7 +2,7 @@
 using System.Management;
 
 
-namespace Authorization.Services
+namespace IBIMTool.Authorization
 {
     internal sealed class HardDriveInfo
     {
@@ -16,7 +16,7 @@ namespace Authorization.Services
                 {
                     foreach (PropertyData property in drive.Properties)
                     {
-                        if (property.Name == "serialNumber")
+                        if (property.Name.Contains("SerialNumber"))
                         {
                             Debug.Print($"Property: {property.Name}, Value: {property.Value}");
                             result = property.Value.ToString();

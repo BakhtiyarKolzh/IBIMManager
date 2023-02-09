@@ -37,10 +37,10 @@ namespace IBIMTool.Properties {
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string SerialNumber {
             get {
-                return ((string)(this["serialNumber"]));
+                return ((string)(this["SerialNumber"]));
             }
             set {
-                this["serialNumber"] = value;
+                this["SerialNumber"] = value;
             }
         }
         
@@ -49,10 +49,10 @@ namespace IBIMTool.Properties {
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string Password {
             get {
-                return ((string)(this["password"]));
+                return ((string)(this["Password"]));
             }
             set {
-                this["password"] = value;
+                this["Password"] = value;
             }
         }
         
@@ -197,6 +197,18 @@ namespace IBIMTool.Properties {
             }
             set {
                 this["ProjectSectionParam"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Countdemo {
+            get {
+                return ((int)(this["Countdemo"]));
+            }
+            set {
+                this["Countdemo"] = value;
             }
         }
     }

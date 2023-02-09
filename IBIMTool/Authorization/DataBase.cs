@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 
 
-namespace Authorization.Core
+namespace IBIMTool.Authorization
 {
     public class DataBase
     {

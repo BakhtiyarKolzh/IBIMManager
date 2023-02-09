@@ -4,10 +4,12 @@
     xmlns:converters="clr-namespace:IBIMTool.ViewConverters">
 
     <ResourceDictionary.MergedDictionaries>
+
         <ResourceDictionary Source="/IBIMTool;component/Themes/CustomStyles.xaml" />
         <ResourceDictionary Source="/IBIMTool;component/Themes/DataTemplate.xaml" />
         <ResourceDictionary Source="/IBIMTool;component/Themes/Animation.xaml" />
         <ResourceDictionary Source="/IBIMTool;component/Themes/Colors.xaml" />
+
     </ResourceDictionary.MergedDictionaries>
 
     <converters:NullVisibilityConverter x:Key="NullBoolToVis" />
