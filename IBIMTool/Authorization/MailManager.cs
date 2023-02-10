@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net.Mail;
 using System.Text;
 
@@ -7,11 +8,13 @@ namespace IBIMTool.Authorization
 {
     internal sealed class MailManager : IDisposable
     {
-        public void SendDataToMail(string email, string data)
+        public void SendDataToMail(string email, string data, out string msg)
         {
+            msg = null;
             string mailAddress = "b.koljabai@taimas-group.kz";
             try
             {
+                
                 SmtpClient mySmtpClient = new SmtpClient("smtp.mail.ru");
                 mySmtpClient.UseDefaultCredentials = true;
                 mySmtpClient.EnableSsl = true;
@@ -36,8 +39,8 @@ namespace IBIMTool.Authorization
             }
             catch (SmtpException ex)
             {
-                throw new ApplicationException
-                ("Error SmtpException: " + ex.Message);
+                Debug.Print("Error: " + ex.Message);
+                msg = ex.Message;
             }
 
         }

@@ -127,7 +127,7 @@ namespace IBIMTool.Authorization
                 {
                     var mail = new MailManager();
                     var password = GetPasswordFromDataBase(email);
-                    mail.SendDataToMail(email, password);
+                    mail.SendDataToMail(email, password, out string msg);
                     mail.Dispose();
                 }
             }
