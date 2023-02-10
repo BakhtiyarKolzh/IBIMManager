@@ -38,8 +38,9 @@ namespace IBIMTool.Authorization
         }
 
 
-        public static DataTable UpdateDataTable(string queryExpression)
+        public static DataTable UpdateDataTable(string queryExpression, out string msg)
         {
+            msg = null;
             DataTable table = null;
             DataBase database = new DataBase();
             using (SqlConnection connection = database.GetConnection())
@@ -58,7 +59,7 @@ namespace IBIMTool.Authorization
                     catch (Exception ex)
                     {
                         Debug.Print("Error: " + ex.Message);
-                        throw new Exception(queryExpression, ex);
+                        msg = ex.Message;
                     }
                 }
             }
@@ -66,8 +67,9 @@ namespace IBIMTool.Authorization
         }
 
 
-        public static bool ExecuteNonQueryHandler(string queryExpression)
+        public static bool ExecuteNonQueryHandler(string queryExpression, out string msg)
         {
+            msg = null;
             bool result = false;
             DataBase database = new DataBase();
             using (SqlConnection connection = database.GetConnection())
@@ -84,7 +86,7 @@ namespace IBIMTool.Authorization
                     catch (Exception ex)
                     {
                         Debug.Print("Error: " + ex.Message);
-                        throw new Exception(queryExpression, ex);
+                        msg = ex.Message;
                     }
                 }
             }

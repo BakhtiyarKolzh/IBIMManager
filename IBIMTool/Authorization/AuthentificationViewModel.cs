@@ -1,6 +1,8 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Autodesk.Revit.UI;
+using CommunityToolkit.Mvvm.ComponentModel;
 using IBIMTool.Views;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Diagnostics;
 using System.Reflection;
@@ -11,8 +13,8 @@ namespace IBIMTool.Authorization
     public sealed class AuthentificationViewModel : ObservableObject
     {
 
-        public bool IsActivated { get; set; } = Properties.Settings.Default.IsActivated;
-
+        //public bool IsActivated { get; set; } = Properties.Settings.Default.IsActivated;
+        public bool IsActivated { get; set; } = false;
 
         #region Private Fields
 
@@ -41,6 +43,9 @@ namespace IBIMTool.Authorization
         }
 
         private string email;
+        [StringLength(30, MinimumLength = 5, ErrorMessage = "Email must contain at least 5 characters")]
+        [RegularExpression(@"^[-\w.]+@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,4}$",
+            ErrorMessage = "Email entered incorrectly")]
         public string Email
         {
             get => email;
@@ -56,7 +61,6 @@ namespace IBIMTool.Authorization
         }
 
         #endregion
-
 
 
         public bool StartValidateActivation()
@@ -75,7 +79,6 @@ namespace IBIMTool.Authorization
                         IsActivated = true;
                         ControlVersion();
                     }
-
                 }
             }
             return IsActivated;
@@ -87,7 +90,7 @@ namespace IBIMTool.Authorization
             Assembly assembly = Assembly.GetExecutingAssembly();
             string version = assembly.GetName().Version.ToString();
             string queryExpression = $"UPDATE Users SET Version = '{version}' WHERE Email = '{email}'";
-            DataTable table = DataBase.UpdateDataTable(queryExpression);
+            DataTable table = DataBase.UpdateDataTable(queryExpression, out string msg);
             if (table == null) { throw new ArgumentNullException("DataTable"); }
             return table.Rows.Count == 1;
         }
@@ -95,12 +98,17 @@ namespace IBIMTool.Authorization
 
         public bool ValidateActivationInDataBase()
         {
-            string queryExpression = $"Select Id, IsActivated, Email, Password, SerialNumber from Users where IsActivated='{IsActivated}' and Email= '{login}' and Password='{password}' and SerialNumber='{serialNumber}'";
-            DataTable table = DataBase.UpdateDataTable(queryExpression);
+            string queryExpression = $"Select Id, IsActivated, Email, Password, SerialNumber from Users where IsActivated='{IsActivated}' and Email= '{email}' and Password='{password}' and SerialNumber='{serialNumber}'";
+            DataTable table = DataBase.UpdateDataTable(queryExpression, out string msg);
             if (table == null) { throw new ArgumentNullException("DataTable"); }
-            Debug.WriteLine("Count: " + table.Rows.Count);
+            //Debug.WriteLine("Count: " + table.Rows.Count);
+            else if (!string.IsNullOrEmpty(msg))
+            {
+                Message += msg;
+            }
             IsActivated = table.Rows.Count == 1;
             return IsActivated;
+
         }
 
 
@@ -114,7 +122,7 @@ namespace IBIMTool.Authorization
             }
             else
             {
-                result = RegistrationInDataBase(serialNumber);
+                result = RegistrationInDataBase(serialNumber, email);
                 if (result)
                 {
                     var mail = new MailManager();
@@ -127,14 +135,17 @@ namespace IBIMTool.Authorization
         }
 
 
-        private bool RegistrationInDataBase(string serialNumber)
+        private bool RegistrationInDataBase(string serialNumber, string email)
         {
             bool result = false;
-            string queryExpression = $"Insert into Users (FirstName, LastName, Email, SerialNumber) Values ('{firstName}','{lastName}', '{login}', '{serialNumber}')";
-            if (DataBase.ExecuteNonQueryHandler(queryExpression))
+            string queryExpression = $"Insert into Users (FirstName, LastName, Email, SerialNumber) Values ('{firstName}','{lastName}', '{email}', '{serialNumber}')";
+            if (DataBase.ExecuteNonQueryHandler(queryExpression, out string msg))
             {
-                Message = " ... password... ";
                 result = true;
+            }
+            else if (!string.IsNullOrEmpty(msg))
+            {
+                Message += msg;
             }
             return result;
         }

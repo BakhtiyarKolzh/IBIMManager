@@ -14,13 +14,13 @@ namespace IBIMTool.Commands
     internal class InfoCommand : IExternalCommand, IExternalCommandAvailability
     {
         private static int counter = Properties.Settings.Default.Countdemo;
-        private static IBIMToolHelper toolHelper = IBIMToolApp.Host.Services.GetRequiredService<IBIMToolHelper>();
+        private readonly IBIMToolHelper toolHelper = IBIMToolApp.Host.Services.GetRequiredService<IBIMToolHelper>();
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             AuthentificationViewModel auto = new AuthentificationViewModel();
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-            toolHelper.IsActive = counter < 10 || auto.StartValidateActivation();
+            toolHelper.IsActive = counter < 0 || auto.StartValidateActivation();
             Properties.Settings.Default.Countdemo = counter += 1;
             Properties.Settings.Default.Save();
 

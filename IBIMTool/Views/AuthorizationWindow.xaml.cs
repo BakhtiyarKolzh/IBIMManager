@@ -1,6 +1,7 @@
 ﻿using IBIMTool.Authorization;
 using MaterialDesignThemes.Wpf;
 using System;
+using System.Web.UI.WebControls;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -24,15 +25,20 @@ namespace IBIMTool.Views
         {
             Dispatcher.CurrentDispatcher.Invoke(() =>
             {
+                MessageText.Text = string.Empty;
                 IsActivated = viewmodel.ValidateActivationInDataBase();
                 Properties.Settings.Default.IsActivated = IsActivated;
                 Properties.Settings.Default.Save();
                 if (!IsActivated)
                 {
-                    throw new Exception("Не удалось найти");
+                    if (string.IsNullOrEmpty(MessageText.Text))
+                    {
+                        MessageText.Text = "Something wrong";
+                    }
                 }
                 else
                 {
+                    viewmodel.ControlVersion();
                     this.Close();
                 }
             });
@@ -48,7 +54,10 @@ namespace IBIMTool.Views
                 Properties.Settings.Default.Save();
                 if (!IsActivated)
                 {
-                    throw new Exception("Что то не так");
+                    if (string.IsNullOrEmpty(MessageText.Text))
+                    {
+                        MessageText.Text = "Something wrong";
+                    }
                 }
                 else
                 {
@@ -62,6 +71,8 @@ namespace IBIMTool.Views
         {
             Dispatcher.CurrentDispatcher.Invoke(() =>
             {
+                MessageText.Text = string.Empty;
+
                 LabelName.Content = "REGISTRATION";
 
                 Signin.Visibility = Visibility.Collapsed;
@@ -71,7 +82,7 @@ namespace IBIMTool.Views
                 FirstName.Visibility = Visibility.Visible;
                 LastName.Visibility = Visibility.Visible;
                 Regin.Visibility = Visibility.Visible;
-                
+                 
             });
         }
     }

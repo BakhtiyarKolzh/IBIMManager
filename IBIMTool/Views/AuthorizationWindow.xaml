@@ -7,7 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Width="300"
-    Height="350"
+    Height="300"
     d:DataContext="{d:DesignInstance Type=auto:AuthentificationViewModel}"
     Background="White"
     WindowStartupLocation="CenterScreen"
@@ -45,7 +45,7 @@
             FontFamily="Arial"
             FontSize="15"
             FontWeight="Bold"
-            Foreground="#FF2D5A5F" Grid.ColumnSpan="2" Margin="83,0,0,0" />
+            Foreground="#FF2D5A5F" Grid.ColumnSpan="2" Margin="83,-5,0,0" />
 
         <StackPanel
             Grid.Row="1"
@@ -71,7 +71,6 @@
                 Visibility="Collapsed"
                 materialDesign:HintAssist.Hint="LastName"/>
             <TextBox
-                Name="EmailField"
                 Width="200"
                 Height="25"
                 Margin="10"
@@ -105,7 +104,7 @@
                 Name="Regin"
                 Width="200"
                 Height="25"
-                Margin="10,20,10,10"
+                Margin="8"
                 Background="#FF959C98"
                 Click="Registration_Click"
                 Content="REGISTRATION"
@@ -127,13 +126,14 @@
 
         </StackPanel>
 
-        <Grid Grid.Row="2" Margin="5,5,5,5" Grid.ColumnSpan="2">
+        <Grid Grid.Row="2" Margin="5,5,5,5" Grid.ColumnSpan="2" >
             <TextBlock
                 Name="MessageText"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                d:Text="Simple message"
-                Text="{Binding Path=Message, Mode=OneWay}" />
+                d:Text="Simple message "
+                TextWrapping="Wrap"
+                Text="{Binding Path=Message, Mode=TwoWay}" />
         </Grid>
 
     </Grid>

@@ -25,7 +25,7 @@ namespace IBIMTool.Authorization
                 MailMessage message = new MailMessage(fromAddress, toAddress);
 
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.AppendLine($"password is {data}");
+                stringBuilder.AppendLine($"Password is {data}");
                 stringBuilder.AppendLine($"Email is {email}");
 
                 message.Body = stringBuilder.ToString();
