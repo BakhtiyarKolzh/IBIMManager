@@ -11,7 +11,7 @@ namespace IBIMTool.Authorization
         public void SendDataToMail(string email, string data, out string msg)
         {
             msg = null;
-            string mailAddress = "b.koljabai@taimas-group.kz";
+            string mailAddress = "info@taimas-group.kz";
             try
             {
                 
@@ -20,7 +20,7 @@ namespace IBIMTool.Authorization
                 mySmtpClient.EnableSsl = true;
 
                 System.Net.NetworkCredential basicAuthenticationInfo = new System.Net.NetworkCredential
-                (mailAddress, "1Je5jDjhGCP4WukqrDVJ");
+                (mailAddress, "EvaV8dm0XYuGh7LN5J7u");
                 mySmtpClient.Credentials = basicAuthenticationInfo;
 
                 MailAddress fromAddress = new MailAddress(mailAddress, "Taimas");
