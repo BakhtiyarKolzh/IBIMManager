@@ -23,7 +23,7 @@ namespace IBIMTool.Authorization
                 (mailAddress, "EvaV8dm0XYuGh7LN5J7u");
                 mySmtpClient.Credentials = basicAuthenticationInfo;
 
-                MailAddress fromAddress = new MailAddress(mailAddress, "Taimas");
+                MailAddress fromAddress = new MailAddress(mailAddress, "TAIMAS COMPANY");
                 MailAddress toAddress = new MailAddress(email);
                 MailMessage message = new MailMessage(fromAddress, toAddress);
 

@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+	<?define IBIMTool_TargetDir=$(var.IBIMTool.TargetDir)?>
+	<?define IBIMTool_ProjectDir=$(var.IBIMTool.ProjectDir)?>
+	<?define ProductCode = "b1308824-a295-4e8a-92ee-1f2b8fca5c48"?>
+	<?define UpgradeCode = "027954b4-bccf-4d0e-af6b-4d126511a591"?>
+	<?define ProductVersion = 4.0.1.0?>
+
+	<Product Id="$(var.ProductCode)" 
+			 Name="IBIMTool" 
+			 Language="1033" 
+			 Version="$(var.ProductVersion)" 
+			 Manufacturer="TAIMAS" 
+			 UpgradeCode="$(var.UpgradeCode)" >
+
+		<Package InstallerVersion="200" 
+				 Compressed="yes" 
+				 InstallScope="perMachine" />
+
+		<Upgrade Id="$(var.UpgradeCode)">
+			<!--<UpgradeVersion Minimum="$(var.ProductVersion)"
+							IncludeMinimum="no"
+							OnlyDetect="yes"
+							Property="NEWPRODUCTFOUND"
+      />
+			<UpgradeVersion Minimum="0.0.0.1"
+							IncludeMinimum="yes"
+							Maximum="$(var.ProductVersion)"
+							IncludeMaximum="no"
+							Property="UPGRADEFOUND"
+      />-->
+		</Upgrade>
+
+			<Upgrade Id="$(var.UpgradeCode)">
+				<UpgradeVersion OnlyDetect="yes" Minimum="$(var.ProductVersion)" Property="NEWERVERSIONDETECTED" IncludeMinimum="no" />
+			<UpgradeVersion OnlyDetect="no" Maximum="$(var.ProductVersion)" Property="OLDERVERSIONBEINGUPGRADED" IncludeMaximum="no" />
+			</Upgrade>
+		<InstallExecuteSequence>
+			<RemoveExistingProducts After="InstallInitialize" />
+		</InstallExecuteSequence>
+
+
+		
+		
+
+		<Upgrade Id='$(var.UpgradeCode)'>
+			<UpgradeVersion Minimum='$(var.ProductVersion)' IncludeMinimum='no' OnlyDetect='yes' Property='NEWPRODUCTFOUND' />
+			<UpgradeVersion Minimum="1.0.0.0" IncludeMinimum='yes' Maximum='$(var.ProductVersion)' IncludeMaximum='no' Property='UPGRADEFOUND' />
+		</Upgrade>
+
+		<InstallExecuteSequence>
+			<Custom Action='PreventDowngrading' After='FindRelatedProducts'>NEWPRODUCTFOUND</Custom>
+			<RemoveExistingProducts After='InstallFinalize' />
+		</InstallExecuteSequence>
+		
+		<InstallUISequence>
+			<Custom Action='PreventDowngrading' After='FindRelatedProducts'>NEWPRODUCTFOUND</Custom>
+		</InstallUISequence>
+
+		<CustomAction Id='PreventDowngrading' Error='Newer version already installed' />
+
+	
+
+		<!--<MajorUpgrade 
+			AllowDowngrades="no" 
+			AllowSameVersionUpgrades="yes"
+			DowngradeErrorMessage="A newer version of [ProductName] is already installed."
+			DisallowUpgradeErrorMessage="Error version"
+			MigrateFeatures="yes" 
+			Disallow="yes" />
+		<MediaTemplate />-->
+
+		<Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+		<Feature Id="ProductFeature" Title="IBIMTool" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentGroupRef Id="ProductAddin" />
+		</Feature>
+
+		
+		
+	</Product>
+
+	
+	
+	
+	
+	
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="CommonAppDataFolder">
+				<Directory Id="Autodesk" Name="Autodesk">
+					<Directory Id="Revit" Name="Revit">
+						<Directory Id="Addins" Name="Addins">
+							<Directory Id="INSTALLFOLDER2019" Name="2019">
+
+								<Directory Id="INSTALLFOLDER" Name="IBIMTool" />
+
+							</Directory>
+						</Directory>
+					</Directory>
+				</Directory>
+			</Directory>
+		</Directory>
+	</Fragment>
+
+
+	<Fragment>
+
+		<ComponentGroup Id="ProductAddin" Directory="INSTALLFOLDER2019">
+			<Component Id="IBIMTool.addin" Guid="589099eb-b112-419c-b966-fb0a835754ee">
+				<File Id="IBIMTool.addin" Name="IBIMTool.addin" Source="$(var.IBIMTool_ProjectDir)IBIMTool.addin" />
+			</Component>
+		</ComponentGroup>
+
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<Component Id="IBIMTool.dll" Guid="639e7c90-ac50-481b-b7f7-a09d9be7a940">
+				<File Id="IBIMTool.dll" Name="IBIMTool.dll" Source="$(var.IBIMTool_TargetDir)IBIMTool.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Logging.dll" Guid="40fe38f7-e8ac-4e38-8769-3044ae2c8196">
+			  <File Id="Microsoft.Extensions.Logging.dll" Name="Microsoft.Extensions.Logging.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.Logging.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Logging.Abstractions.dll" Guid="e3023699-a5a9-4e7c-b7c3-a88f03a9b2da">
+			  <File Id="Microsoft.Extensions.Logging.Abstractions.dll" Name="Microsoft.Extensions.Logging.Abstractions.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.Logging.Abstractions.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.DependencyInjection.dll" Guid="ed68feae-96c5-46b1-9c66-cc96349a6316">
+			  <File Id="Microsoft.Extensions.DependencyInjection.dll" Name="Microsoft.Extensions.DependencyInjection.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.DependencyInjection.dll" />
+			</Component>
+			<Component Id="System.Diagnostics.DiagnosticSource.dll" Guid="b9572614-3255-47ab-8221-7f289702f5b2">
+			  <File Id="System.Diagnostics.DiagnosticSource.dll" Name="System.Diagnostics.DiagnosticSource.dll" Source="$(var.IBIMTool_TargetDir)System.Diagnostics.DiagnosticSource.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.FileProviders.Physical.dll" Guid="30657aad-5785-4910-a749-9e668cb0570c">
+			  <File Id="Microsoft.Extensions.FileProviders.Physical.dll" Name="Microsoft.Extensions.FileProviders.Physical.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.FileProviders.Physical.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.FileSystemGlobbing.dll" Guid="a7733920-111c-45a2-85b0-ff94f4b7ac6b">
+			  <File Id="Microsoft.Extensions.FileSystemGlobbing.dll" Name="Microsoft.Extensions.FileSystemGlobbing.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.FileSystemGlobbing.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Configuration.FileExtensions.dll" Guid="0c922a1d-2f61-4c06-b36d-20e2a1903bec">
+			  <File Id="Microsoft.Extensions.Configuration.FileExtensions.dll" Name="Microsoft.Extensions.Configuration.FileExtensions.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.Configuration.FileExtensions.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Guid="097ca072-0f1e-471f-93ab-dd1bfe703458">
+			  <File Id="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Name="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.Configuration.EnvironmentVariables.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Configuration.dll" Guid="56887706-75f2-4171-85a5-eb6f84a4cd0a">
+			  <File Id="Microsoft.Extensions.Configuration.dll" Name="Microsoft.Extensions.Configuration.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.Configuration.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Configuration.CommandLine.dll" Guid="d6a21391-d665-4478-9646-0a485dd2fcba">
+			  <File Id="Microsoft.Extensions.Configuration.CommandLine.dll" Name="Microsoft.Extensions.Configuration.CommandLine.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.Configuration.CommandLine.dll" />
+			</Component>
+			<Component Id="System.Text.Json.dll" Guid="da20c78f-1734-4e71-8292-a2f7a87da5d6">
+			  <File Id="System.Text.Json.dll" Name="System.Text.Json.dll" Source="$(var.IBIMTool_TargetDir)System.Text.Json.dll" />
+			</Component>
+			<Component Id="System.Text.Encodings.Web.dll" Guid="b94f465b-f201-49a6-b1ae-bfb336ba1426">
+			  <File Id="System.Text.Encodings.Web.dll" Name="System.Text.Encodings.Web.dll" Source="$(var.IBIMTool_TargetDir)System.Text.Encodings.Web.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Configuration.UserSecrets.dll" Guid="a64d76ed-8777-4747-ab4a-27a7d18fe3f5">
+			  <File Id="Microsoft.Extensions.Configuration.UserSecrets.dll" Name="Microsoft.Extensions.Configuration.UserSecrets.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.Configuration.UserSecrets.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Configuration.Binder.dll" Guid="41984ca6-fc55-4a82-b453-db928ca560ff">
+			  <File Id="Microsoft.Extensions.Configuration.Binder.dll" Name="Microsoft.Extensions.Configuration.Binder.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.Configuration.Binder.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Logging.EventLog.dll" Guid="a850e93f-dda0-42bc-9b74-992b0eec0583">
+			  <File Id="Microsoft.Extensions.Logging.EventLog.dll" Name="Microsoft.Extensions.Logging.EventLog.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.Logging.EventLog.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Logging.Configuration.dll" Guid="0394ab6b-c9fa-4063-a4c8-0bfaaaa7b882">
+			  <File Id="Microsoft.Extensions.Logging.Configuration.dll" Name="Microsoft.Extensions.Logging.Configuration.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.Logging.Configuration.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Options.ConfigurationExtensions.dll" Guid="fe87824f-e526-4712-910f-7e7780d50101">
+			  <File Id="Microsoft.Extensions.Options.ConfigurationExtensions.dll" Name="Microsoft.Extensions.Options.ConfigurationExtensions.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.Options.ConfigurationExtensions.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Logging.Console.dll" Guid="66b33810-2ae0-4b5a-97ee-45992ad967c1">
+			  <File Id="Microsoft.Extensions.Logging.Console.dll" Name="Microsoft.Extensions.Logging.Console.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.Logging.Console.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Configuration.Json.dll" Guid="d54da7de-293f-46d1-9f02-f696a822d088">
+			  <File Id="Microsoft.Extensions.Configuration.Json.dll" Name="Microsoft.Extensions.Configuration.Json.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.Configuration.Json.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Options.dll" Guid="de6d2adc-399b-4757-9cee-99deec955a92">
+			  <File Id="Microsoft.Extensions.Options.dll" Name="Microsoft.Extensions.Options.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.Options.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.FileProviders.Abstractions.dll" Guid="3ee55ace-ff59-4ee0-9396-e30feba132bc">
+			  <File Id="Microsoft.Extensions.FileProviders.Abstractions.dll" Name="Microsoft.Extensions.FileProviders.Abstractions.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.FileProviders.Abstractions.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Primitives.dll" Guid="a1fc5644-60b3-47d9-82d5-dab37ac5abee">
+			  <File Id="Microsoft.Extensions.Primitives.dll" Name="Microsoft.Extensions.Primitives.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.Primitives.dll" />
+			</Component>
+			<Component Id="MaterialDesignThemes.MahApps.dll" Guid="3b26dcf1-3625-458c-a224-714fa362fe20">
+			  <File Id="MaterialDesignThemes.MahApps.dll" Name="MaterialDesignThemes.MahApps.dll" Source="$(var.IBIMTool_TargetDir)MaterialDesignThemes.MahApps.dll" />
+			</Component>
+			<Component Id="MaterialDesignThemes.Wpf.dll" Guid="1f7a94b2-3514-4d90-8c0b-7880aa7b3269">
+			  <File Id="MaterialDesignThemes.Wpf.dll" Name="MaterialDesignThemes.Wpf.dll" Source="$(var.IBIMTool_TargetDir)MaterialDesignThemes.Wpf.dll" />
+			</Component>
+			<Component Id="CommunityToolkit.Mvvm.dll" Guid="4db054c8-fb72-48f6-97ca-932a97b89bf4">
+			  <File Id="CommunityToolkit.Mvvm.dll" Name="CommunityToolkit.Mvvm.dll" Source="$(var.IBIMTool_TargetDir)CommunityToolkit.Mvvm.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Hosting.Abstractions.dll" Guid="ee89be5b-93ad-4539-b8c4-18d2822202ae">
+			  <File Id="Microsoft.Extensions.Hosting.Abstractions.dll" Name="Microsoft.Extensions.Hosting.Abstractions.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.Hosting.Abstractions.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Guid="d61859fd-725c-4bca-a5aa-2ad4575bbf4a">
+			  <File Id="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Name="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.DependencyInjection.Abstractions.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Hosting.dll" Guid="68a0fbd4-99c2-4aef-b3e4-9cdcaf66b49f">
+			  <File Id="Microsoft.Extensions.Hosting.dll" Name="Microsoft.Extensions.Hosting.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.Hosting.dll" />
+			</Component>
+			<Component Id="MahApps.Metro.dll" Guid="30f6f5af-b118-4e10-9d03-5a966903154f">
+			  <File Id="MahApps.Metro.dll" Name="MahApps.Metro.dll" Source="$(var.IBIMTool_TargetDir)MahApps.Metro.dll" />
+			</Component>
+			<Component Id="ControlzEx.dll" Guid="26bd24d9-b11b-4eff-8380-c99c688eb4e9">
+			  <File Id="ControlzEx.dll" Name="ControlzEx.dll" Source="$(var.IBIMTool_TargetDir)ControlzEx.dll" />
+			</Component>
+			<Component Id="Microsoft.Xaml.Behaviors.dll" Guid="e095296d-ea41-42f7-a59d-32de67c2ceb8">
+			  <File Id="Microsoft.Xaml.Behaviors.dll" Name="Microsoft.Xaml.Behaviors.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Xaml.Behaviors.dll" />
+			</Component>
+			<Component Id="MaterialDesignColors.dll" Guid="fde39afe-7d03-483b-9259-706d5796a018">
+			  <File Id="MaterialDesignColors.dll" Name="MaterialDesignColors.dll" Source="$(var.IBIMTool_TargetDir)MaterialDesignColors.dll" />
+			</Component>
+			<Component Id="System.Memory.dll" Guid="8fa05d56-d61d-4832-943d-4acd04267a1d">
+			  <File Id="System.Memory.dll" Name="System.Memory.dll" Source="$(var.IBIMTool_TargetDir)System.Memory.dll" />
+			</Component>
+			<Component Id="System.Numerics.Vectors.dll" Guid="9f812151-219a-4aac-be73-c68c2f26ec6a">
+			  <File Id="System.Numerics.Vectors.dll" Name="System.Numerics.Vectors.dll" Source="$(var.IBIMTool_TargetDir)System.Numerics.Vectors.dll" />
+			</Component>
+			<Component Id="System.Runtime.CompilerServices.Unsafe.dll" Guid="abfe42f0-9dd6-4d4f-af36-659772dc8ae7">
+			  <File Id="System.Runtime.CompilerServices.Unsafe.dll" Name="System.Runtime.CompilerServices.Unsafe.dll" Source="$(var.IBIMTool_TargetDir)System.Runtime.CompilerServices.Unsafe.dll" />
+			</Component>
+			<Component Id="System.Buffers.dll" Guid="675e86d6-92db-498d-9291-e71a07605ac8">
+			  <File Id="System.Buffers.dll" Name="System.Buffers.dll" Source="$(var.IBIMTool_TargetDir)System.Buffers.dll" />
+			</Component>
+			<Component Id="Microsoft.Bcl.AsyncInterfaces.dll" Guid="81732fd0-c087-4212-b54f-9519ec374a71">
+			  <File Id="Microsoft.Bcl.AsyncInterfaces.dll" Name="Microsoft.Bcl.AsyncInterfaces.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Bcl.AsyncInterfaces.dll" />
+			</Component>
+			<Component Id="System.Threading.Tasks.Extensions.dll" Guid="6da0425e-7a5c-413c-b38b-7fe1faab4830">
+			  <File Id="System.Threading.Tasks.Extensions.dll" Name="System.Threading.Tasks.Extensions.dll" Source="$(var.IBIMTool_TargetDir)System.Threading.Tasks.Extensions.dll" />
+			</Component>
+			<Component Id="System.ComponentModel.Annotations.dll" Guid="f1910a16-1f8f-403a-9484-d61d52dcd2e1">
+			  <File Id="System.ComponentModel.Annotations.dll" Name="System.ComponentModel.Annotations.dll" Source="$(var.IBIMTool_TargetDir)System.ComponentModel.Annotations.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Configuration.Abstractions.dll" Guid="ea26361a-8278-44e8-9c46-189ea073ceef">
+			  <File Id="Microsoft.Extensions.Configuration.Abstractions.dll" Name="Microsoft.Extensions.Configuration.Abstractions.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.Configuration.Abstractions.dll" />
+			</Component>
+			<Component Id="System.ValueTuple.dll" Guid="09a7d040-c9ea-4b96-9994-b61e74e32088">
+			  <File Id="System.ValueTuple.dll" Name="System.ValueTuple.dll" Source="$(var.IBIMTool_TargetDir)System.ValueTuple.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Logging.Debug.dll" Guid="83ba051d-4816-44fa-b259-299309269d35">
+			  <File Id="Microsoft.Extensions.Logging.Debug.dll" Name="Microsoft.Extensions.Logging.Debug.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.Logging.Debug.dll" />
+			</Component>
+			<Component Id="Microsoft.Extensions.Logging.EventSource.dll" Guid="a71995fc-4fc9-478c-a606-efada1bd4c2c">
+			  <File Id="Microsoft.Extensions.Logging.EventSource.dll" Name="Microsoft.Extensions.Logging.EventSource.dll" Source="$(var.IBIMTool_TargetDir)Microsoft.Extensions.Logging.EventSource.dll" />
+			</Component>
+			<Component Id="IBIMTool.pdb" Guid="75a16c16-9c93-4bbd-8a49-d47346a8cf84">
+			  <File Id="IBIMTool.pdb" Name="IBIMTool.pdb" Source="$(var.IBIMTool_TargetDir)IBIMTool.pdb" />
+			</Component>
+	  </ComponentGroup>
+	</Fragment>
+</Wix>

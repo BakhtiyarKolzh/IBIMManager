@@ -7,22 +7,57 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IBIMTool", "IBIMTool\IBIMTo
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Revit.Async.Shared", "Revit.Async.Shared\Revit.Async.Shared.shproj", "{26214B67-5134-4C0A-86A6-51128E71AFE2}"
 EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Install", "Install\Install.wixproj", "{6C16A30B-359F-432D-837C-56D6D096ADCC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		All|Any CPU = All|Any CPU
+		All|x64 = All|x64
+		All|x86 = All|x86
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9728B73D-4084-4DA2-82DA-877A68011A8C}.All|Any CPU.ActiveCfg = Release|Any CPU
+		{9728B73D-4084-4DA2-82DA-877A68011A8C}.All|Any CPU.Build.0 = Release|Any CPU
+		{9728B73D-4084-4DA2-82DA-877A68011A8C}.All|x64.ActiveCfg = Release|x64
+		{9728B73D-4084-4DA2-82DA-877A68011A8C}.All|x64.Build.0 = Release|x64
+		{9728B73D-4084-4DA2-82DA-877A68011A8C}.All|x86.ActiveCfg = Release|Any CPU
+		{9728B73D-4084-4DA2-82DA-877A68011A8C}.All|x86.Build.0 = Release|Any CPU
 		{9728B73D-4084-4DA2-82DA-877A68011A8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9728B73D-4084-4DA2-82DA-877A68011A8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9728B73D-4084-4DA2-82DA-877A68011A8C}.Debug|x64.ActiveCfg = Debug|x64
 		{9728B73D-4084-4DA2-82DA-877A68011A8C}.Debug|x64.Build.0 = Debug|x64
+		{9728B73D-4084-4DA2-82DA-877A68011A8C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9728B73D-4084-4DA2-82DA-877A68011A8C}.Debug|x86.Build.0 = Debug|Any CPU
 		{9728B73D-4084-4DA2-82DA-877A68011A8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9728B73D-4084-4DA2-82DA-877A68011A8C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9728B73D-4084-4DA2-82DA-877A68011A8C}.Release|x64.ActiveCfg = Release|x64
 		{9728B73D-4084-4DA2-82DA-877A68011A8C}.Release|x64.Build.0 = Release|x64
+		{9728B73D-4084-4DA2-82DA-877A68011A8C}.Release|x86.ActiveCfg = Release|Any CPU
+		{9728B73D-4084-4DA2-82DA-877A68011A8C}.Release|x86.Build.0 = Release|Any CPU
+		{6C16A30B-359F-432D-837C-56D6D096ADCC}.All|Any CPU.ActiveCfg = Release|x86
+		{6C16A30B-359F-432D-837C-56D6D096ADCC}.All|Any CPU.Build.0 = Release|x86
+		{6C16A30B-359F-432D-837C-56D6D096ADCC}.All|x64.ActiveCfg = Release|x86
+		{6C16A30B-359F-432D-837C-56D6D096ADCC}.All|x64.Build.0 = Release|x86
+		{6C16A30B-359F-432D-837C-56D6D096ADCC}.All|x86.ActiveCfg = Release|x86
+		{6C16A30B-359F-432D-837C-56D6D096ADCC}.All|x86.Build.0 = Release|x86
+		{6C16A30B-359F-432D-837C-56D6D096ADCC}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{6C16A30B-359F-432D-837C-56D6D096ADCC}.Debug|Any CPU.Build.0 = Debug|x86
+		{6C16A30B-359F-432D-837C-56D6D096ADCC}.Debug|x64.ActiveCfg = Debug|x86
+		{6C16A30B-359F-432D-837C-56D6D096ADCC}.Debug|x64.Build.0 = Debug|x86
+		{6C16A30B-359F-432D-837C-56D6D096ADCC}.Debug|x86.ActiveCfg = Debug|x86
+		{6C16A30B-359F-432D-837C-56D6D096ADCC}.Debug|x86.Build.0 = Debug|x86
+		{6C16A30B-359F-432D-837C-56D6D096ADCC}.Release|Any CPU.ActiveCfg = Release|x86
+		{6C16A30B-359F-432D-837C-56D6D096ADCC}.Release|Any CPU.Build.0 = Release|x86
+		{6C16A30B-359F-432D-837C-56D6D096ADCC}.Release|x64.ActiveCfg = Release|x86
+		{6C16A30B-359F-432D-837C-56D6D096ADCC}.Release|x64.Build.0 = Release|x86
+		{6C16A30B-359F-432D-837C-56D6D096ADCC}.Release|x86.ActiveCfg = Release|x86
+		{6C16A30B-359F-432D-837C-56D6D096ADCC}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
